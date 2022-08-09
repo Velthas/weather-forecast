@@ -14,8 +14,40 @@ const WeatherApiInteraction = (function () {
         const weatherData = await response.json();
         // Console log to see if it's working.
         console.log(weatherData);
+        // Return the data at last
+        return weatherData;
     }
 
-    fetchApiData();
+    // This takes the JSON data returned by the API
+    // and extracts only the things we will display
+    // Technically unnecessary, but improved readibility
+    function extractRelevantData(weatherObject) {
+
+        // Object literal declaration
+        const weather = {};
+        
+        // Information about the weather itself
+        weather.temperature = weatherObject.main.temp;
+        weather.tempfeelslike = weatherObject.main.feels_like;
+        weather.humidity = weatherObject.main.humidity;
+        weather.windspeed = weatherObject.wind.speed;
+        
+        // A wordy description of how the sky is like
+        // This code returns a capitalized description property
+        // By default it is all lowercase
+        weather.description = weatherObject.weather[0].description.slice(0, 1).toUpperCase() + weatherObject.weather[0].description.slice(1);
+        
+        // Country's name and city's name;
+        weather.city = weatherObject.name;
+        weather.country = weatherObject.sys.country;
+        
+        // Check the result
+        console.log(weather);
+        // Return the result
+        return weather;
+    }
+ 
+    return {extractRelevantData, fetchApiData}
+    
 
 })();
