@@ -51,3 +51,22 @@ const WeatherApiInteraction = (function () {
     
 
 })();
+
+const applicationFlow = (function() {
+ 
+    // This async function allows me organize code in a way
+    // that makes it seem synchronous, so executing top to bottom.
+    // We cannot call our second function before the first
+    // promise resolves: luckily async functions can help us
+    // solve that problem in an elegant and readable way.
+    async function getWeatherInfo() {
+        // We get a promise from fetchApiData, wait until it's resolved
+        let hello = await WeatherApiInteraction.fetchApiData();
+        // Then use this to return the object with condensed info
+        let data = WeatherApiInteraction.extractRelevantData(hello);
+        console.log(data);
+    }
+ 
+    getWeatherInfo();
+ 
+})();
