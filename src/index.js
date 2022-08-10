@@ -1,12 +1,11 @@
 const WeatherApiInteraction = (function () {
 
-    async function fetchApiData() {
+    async function fetchApiData(userQuery) {
 
-        // This is just a momentary placeholder query for testing
-        const placeholderQuery = 'Rome';
         // Base URL for the query
-        // I made sure to slap on the units=metric to return values I can understand
-        const apiQueryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${placeholderQuery}&APPID=481dab978a20a42998a631eff7d4f8f4&units=metric`;
+        // Specified units=metric because I can understand those
+        // I plop in my user's query to make the search dynamic
+        const apiQueryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${userQuery}&APPID=481dab978a20a42998a631eff7d4f8f4&units=metric`;
 
         // Using the fetch method we query the server, and we get back a response object.
         const response = await fetch(apiQueryUrl, { mode: 'cors' });
@@ -59,14 +58,17 @@ const applicationFlow = (function() {
     // promise resolves: luckily async functions can help us
     // solve that problem in an elegant and readable way.
     async function getWeatherInfo() {
+        // Stores what is in the search bar
+        const userInput = domElements.getUserQuery();
         // We get a promise from fetchApiData, wait until it's resolved
-        let hello = await WeatherApiInteraction.fetchApiData();
+        let apiData = await WeatherApiInteraction.fetchApiData(userInput);
         // Then use this to return the object with condensed info
-        let data = WeatherApiInteraction.extractRelevantData(hello);
-        console.log(data);
+        let elaboratedData = WeatherApiInteraction.extractRelevantData(apiData);
+        // Display it for now
+        console.log(elaboratedData);
     }
  
-    getWeatherInfo();
+    return {getWeatherInfo}
  
 })();
 
