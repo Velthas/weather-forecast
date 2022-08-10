@@ -49,7 +49,6 @@ const WeatherApiInteraction = (function () {
  
     return {extractRelevantData, fetchApiData}
     
-
 })();
 
 const applicationFlow = (function() {
@@ -70,3 +69,13 @@ const applicationFlow = (function() {
     getWeatherInfo();
  
 })();
+
+// Module that handles everything concerning DOM Manipulation
+const domElements = (function() {
+ 
+    function getUserQuery() {
+      return document.querySelector('input').value;
+    }
+   
+    return {getUserQuery}
+  })();
