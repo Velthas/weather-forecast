@@ -74,10 +74,20 @@ const applicationFlow = (function() {
 
 // Module that handles everything concerning DOM Manipulation
 const domElements = (function() {
- 
+    
     function getUserQuery() {
       return document.querySelector('input').value;
     }
+    // Currently enables the search functionality
+    // Might use it for more event listeners down the line
+    function addEventListeners() {
+        const searchButton = document.querySelector('button');
+        searchButton.addEventListener('click', () => {applicationFlow.getWeatherInfo()})
+    }
+
+    addEventListeners();
    
     return {getUserQuery}
+
   })();
+  
