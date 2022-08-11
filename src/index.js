@@ -1,5 +1,10 @@
 const WeatherApiInteraction = (function () {
 
+    // Use this to give methods to a weather object
+    const weatherMethods = {
+        insertData: domElements.insertData,
+    };
+
     async function fetchApiData(userQuery) {
 
         // Base URL for the query
@@ -23,7 +28,7 @@ const WeatherApiInteraction = (function () {
     function extractRelevantData(weatherObject) {
 
         // Object literal declaration
-        const weather = {};
+        const weather = Object.create(weatherMethods);
         
         // Information about the weather itself
         weather.temperature = weatherObject.main.temp;
@@ -85,9 +90,36 @@ const domElements = (function() {
         searchButton.addEventListener('click', () => {applicationFlow.getWeatherInfo()})
     }
 
+    // Function to insert data inside the appropriate slot
+    function insertData() {
+        // Get the container to avoid repeatedly calling querySelector on document
+        const infoContainer = document.querySelector(".info-container");
+    
+        // Header portion
+        // Brief description of the weather (sunny, cloudy ecc.)
+        const weatherDescription = infoContainer.querySelector(".grid-top p");
+        weatherDescription.textContent = this.description;
+        // City and country name for long
+        const cityAndCountryName = infoContainer.querySelector(".grid-top h1");
+        cityAndCountryName.textContent = `${this.city}, ${this.country}`;
+    
+        // Bottom-left portion
+        const temperatureContainer = infoContainer.querySelector(".temperature");
+        temperatureContainer.textContent = this.temperature;
+    
+        // Bottom-right portion
+        const allSideInfoParagraphs = Array.from(
+        document.querySelectorAll(".side-info")
+        );
+        allSideInfoParagraphs[0].textContent =
+        "Feels like: " + this.tempfeelslike + "°";
+        allSideInfoParagraphs[1].textContent = "Wind: " + this.windspeed + "km/h";
+        allSideInfoParagraphs[2].textContent = "Humidity: " + this.humidity + "%";
+    }
+
     addEventListeners();
    
-    return {getUserQuery}
+    return {getUserQuery, insertData}
 
   })();
   
