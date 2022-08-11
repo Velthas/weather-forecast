@@ -43,7 +43,10 @@ const WeatherApiInteraction = (function () {
         
         // Country's name and city's name;
         weather.city = weatherObject.name;
-        weather.country = weatherObject.sys.country;
+        const regionNamesConverter = new Intl.DisplayNames(["en"], {
+            type: "region",
+          });
+          weather.country = regionNamesConverter.of(weatherObject.sys.country);
         
         // Check the result
         console.log(weather);
