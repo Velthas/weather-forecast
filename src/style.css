@@ -1,0 +1,138 @@
+:root {
+    --font-color: whitesmoke;
+    --font-stack: 'oswald', Georgia, 'Times New Roman', Times, serif;
+    --temp-margin: 20px;
+    --button-highlight: #54a097;
+}
+ 
+@font-face {
+    font-family: 'Oswald';
+    src: url(./fonts/hello.ttf);
+}
+ 
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+ 
+html {
+    height: 100%;
+    width: 100%;
+ 
+    background-image: url(./images/nick-dunlap-unsplash.jpg);
+    background-size: cover;
+}
+ 
+.header {
+    width: 100%;
+    padding: 10px 20px;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+ 
+.header button {
+    padding: 5px 16px;
+    text-transform: capitalize;
+ 
+    border: 1px solid white;
+    border-radius: 3px;
+ 
+    background-color: transparent;
+    color: white;
+ 
+    transition: 0.3s ease-in;
+    cursor: pointer;
+}
+ 
+.header button:hover {
+    background-color: var(--button-highlight);
+    border: 1px solid var(--button-highlight);
+}
+ 
+.header p {
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    font-weight: bold;
+ 
+    letter-spacing: 5px;
+    
+    margin-bottom: 5px;
+ 
+    color: var(--font-color);
+    font-family: var(--font-stack)
+}
+ 
+.header input[type="text"] {
+    height: 25px;
+    width: 200px;
+ 
+    padding: 3px 5px;
+    border: none;
+    border-radius: 2px;
+}
+ 
+.info-container {
+    display: grid; 
+    grid-template: 1fr 1fr / min-content 1fr;
+ 
+    padding: 10px 20px;
+ 
+    color: var(--font-color);
+    
+}
+ 
+.grid-top {
+    grid-row: 1 / 2;
+    grid-column: 1 / 3;
+ 
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-size: 1.5rem;
+ 
+    font-family: var(--font-stack);
+}
+ 
+.grid-top p {
+    font-size: 1.35rem
+}
+ 
+.temperature {
+    font-size: 7rem;
+    font-family: var(--font-stack);
+ 
+    align-self: center;
+    margin-top: -25px;
+    margin-right: var(--temp-margin)
+}
+ 
+.temperature::after {
+    content: '°C';
+    font-size: xx-large;
+ 
+    position: relative;
+    bottom: 80px;
+}
+ 
+p.temperature + div {
+    display: flex;
+    flex-direction: column;
+ 
+    align-items: flex-start;
+    justify-content: space-evenly;
+ 
+    border-left: 2px solid var(--font-color);
+    padding: 3px;
+    padding-left: var(--temp-margin);
+ 
+    height: 70%;
+    align-self: center;
+}
+ 
+.side-info {
+    font-size: 1.3rem;
+}
+ 
