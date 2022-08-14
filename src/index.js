@@ -1,3 +1,5 @@
+import './style.css';
+
 // Module that handles everything concerning DOM Manipulation
 const domElements = (function () {
     function getUserQuery() {
@@ -74,10 +76,10 @@ const WeatherApiInteraction = (function () {
     const weather = Object.create(weatherMethods);
 
     // Information about the weather itself
-    weather.temperature = weatherObject.main.temp;
-    weather.tempfeelslike = weatherObject.main.feels_like;
+    weather.temperature = Number(weatherObject.main.temp).toFixed(0);
+    weather.tempfeelslike = Number(weatherObject.main.feels_like).toFixed(0);
     weather.humidity = weatherObject.main.humidity;
-    weather.windspeed = weatherObject.wind.speed;
+    weather.windspeed = Number(weatherObject.wind.speed).toFixed(1);
 
     // A wordy description of how the sky is like
     // This code returns a capitalized description property
