@@ -40,10 +40,26 @@ const domElements = (function () {
       allSideInfoParagraphs[1].textContent = 'Wind: ' + this.windspeed + 'km/h';
       allSideInfoParagraphs[2].textContent = 'Humidity: ' + this.humidity + '%';
     }
+
+    // Appends an error div with a message under the search bar
+    function createErrorDiv(message) {
+      const errorDiv = document.createElement("div");
+      errorDiv.classList.add("error", "visible");
+      errorDiv.textContent = message;
+      document
+        .querySelector(".header")
+        .insertBefore(errorDiv, document.querySelector("button"));
+    }
+  
+    // Deletes the error div
+    function deleteErrorDiv() {
+      const errorDiv = document.querySelector(".error");
+      if (errorDiv) errorDiv.remove();
+    }
   
     addEventListeners();
   
-    return { getUserQuery, insertData };
+    return { getUserQuery, insertData, createErrorDiv, deleteErrorDiv };
   })();
 
 const WeatherApiInteraction = (function () {
@@ -53,19 +69,26 @@ const WeatherApiInteraction = (function () {
   };
 
   async function fetchApiData(userQuery) {
-    // Base URL for the query
-    // Specified units=metric because I can understand those
-    // I plop in my user's query to make the search dynamic
-    const apiQueryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${userQuery}&APPID=481dab978a20a42998a631eff7d4f8f4&units=metric`;
-
-    // Using the fetch method we query the server, and we get back a response object.
-    const response = await fetch(apiQueryUrl, { mode: 'cors' });
-    // We need to extract the information we need, and for that we call the .json method.
-    const weatherData = await response.json();
-    // Console log to see if it's working.
-    console.log(weatherData);
-    // Return the data at last
-    return weatherData;
+    try {
+      // Base URL for the query
+      // Specified units=metric because I can understand those
+      // I plop in my user's query to make the search dynamic
+      const apiQueryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${userQuery}&APPID=481dab978a20a42998a631eff7d4f8f4&units=metric`;
+ 
+      // Using the fetch method we query the server, and we get back a response object.
+      const response = await fetch(apiQueryUrl, { mode: "cors" });
+      // We need to extract the information we need, and for that we call the .json method.
+      const weatherData = await response.json();
+      // Check for errors
+      if (weatherData.cod === "404") {
+        throw weatherData;
+      }
+      // Return the data at last
+      return weatherData;
+    } catch (error) {
+      // If anything is wrong, knock upstairs.
+      return { isError: true, message: error.message };
+    }
   }
 
   // This takes the JSON data returned by the API
@@ -110,15 +133,27 @@ const applicationFlow = (function () {
   // We cannot call our second function before the first
   // promise resolves: luckily async functions can help us
   // solve that problem in an elegant and readable way.
-  async function getWeatherInfo() {
-    // Stores what is in the search bar
-    const userInput = domElements.getUserQuery();
-    // We get a promise from fetchApiData, wait until it's resolved
-    let apiData = await WeatherApiInteraction.fetchApiData(userInput);
-    // Then use this to return the object with condensed info
-    let elaboratedData = WeatherApiInteraction.extractRelevantData(apiData);
-    // Display it for now
-    elaboratedData.insertData();
+    async function getWeatherInfo() {
+    // If there is an error div, delete it
+    domElements.deleteErrorDiv();
+ 
+    try {
+      // Stores what is in the search bar
+      const userInput = domElements.getUserQuery();
+      // We get a promise from fetchApiData, wait until it's resolved
+      const apiData = await WeatherApiInteraction.fetchApiData(userInput);
+      // If there was a mistake, the apiData object will
+      // have an isError property with a value of true
+      if (apiData.isError) throw new Error(apiData.message);
+ 
+      // If there is no mistake return the object with condensed info
+      let elaboratedData = WeatherApiInteraction.extractRelevantData(apiData);
+      // Display it for now
+      elaboratedData.insertData();
+    } catch (error) {
+      domElements.createErrorDiv(error.message);
+      return;
+    }
   }
 
   return { getWeatherInfo };

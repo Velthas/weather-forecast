@@ -3,6 +3,7 @@
     --font-stack: 'oswald', Georgia, 'Times New Roman', Times, serif;
     --temp-margin: 20px;
     --button-highlight: #54a097;
+    --error-message: #ff0000;
 }
  
 @font-face {
@@ -136,3 +137,7 @@ p.temperature + div {
     font-size: 1.3rem;
 }
  
+.error {
+    text-transform: capitalize;
+    color: var(--error-message);
+}
