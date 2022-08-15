@@ -21,8 +21,9 @@ html {
     height: 100%;
     width: 100%;
  
-    background-image: url(./images/nick-dunlap-unsplash.jpg);
+    background-image: url(./images/ryan-unsplash.jpg);
     background-size: cover;
+    background-position: center;
 }
  
 .header {
@@ -84,6 +85,10 @@ html {
  
     color: var(--font-color);
     
+}
+
+.info-container * {
+text-shadow: 1px 1px black;
 }
  
 .grid-top {
