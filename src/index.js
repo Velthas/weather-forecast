@@ -1,4 +1,11 @@
 import './style.css';
+import clearSky from './images/ryan-unsplash.jpg';
+import snow from './images/aaron-burden-unsplash.jpg';
+import drizzle from './images/roman-synkevych-unsplash.jpg';
+import rain from './images/valentin-muller-unsplash.jpg';
+import thunderstorm from './images/max-saeling-unsplash.jpg';
+import scatteredClouds from './images/janis-rozenfelds-unsplash.jpg';
+import overcastClouds from './images/anandu-vinod-unsplash.jpg';
 
 // Module that handles everything concerning DOM Manipulation
 const domElements = (function () {
@@ -56,16 +63,51 @@ const domElements = (function () {
       const errorDiv = document.querySelector(".error");
       if (errorDiv) errorDiv.remove();
     }
+
+  // Looks at the "code" property inside the weather object
+  // This is something that returns from the API Call
+  // and would normally be used to determine which weather icon to use
+  // We are going to use it to set a custom background
+  // This is built to be a method of the weather object
+  function setBackground() {
+ 
+    const htmlNode = document.querySelector('html');
+ 
+    switch(true) {
+      case this.code === 800: // Codes for clear sky
+        htmlNode.style.backgroundImage = "url('" + clearSky + "')"
+        break;
+      case (this.code === 801 || this.code === 802): // Codes for few clouds and scattered clouds
+        htmlNode.style.backgroundImage = "url('" + scatteredClouds + "')"
+        break;
+      case (this.code === 803 || this.code === 804): // Codes for broken clouds and overcast clouds
+        htmlNode.style.backgroundImage = "url('" + overcastClouds + "')"
+        break;
+      case (this.code >= 600 && this.code <= 622): // Codes for all sorts of snow
+      "url('" + snow + "')"
+        break;
+      case (this.code >= 500 && this.code <= 531): // Codes for all sorts of rain
+        htmlNode.style.backgroundImage = "url('" + rain + "')"
+        break;
+      case (this.code >= 300 && this.code <= 321): // Codes for all sorts of drizzle
+        htmlNode.style.backgroundImage = "url('" + drizzle + "')"
+        break;
+      case (this.code >= 200 && this.code <= 232): // Codes for all sorts of thunderstorms
+        htmlNode.style.backgroundImage = "url('" + thunderstorm + "')"
+    }
+ 
+  }
   
     addEventListeners();
   
-    return { getUserQuery, insertData, createErrorDiv, deleteErrorDiv };
+    return { getUserQuery, insertData, createErrorDiv, deleteErrorDiv, setBackground };
   })();
 
 const WeatherApiInteraction = (function () {
   // Use this to give methods to a weather object
   const weatherMethods = {
     insertData: domElements.insertData,
+    setBackground: domElements.setBackground,
   };
 
   async function fetchApiData(userQuery) {
@@ -111,6 +153,10 @@ const WeatherApiInteraction = (function () {
       weatherObject.weather[0].description.slice(0, 1).toUpperCase() +
       weatherObject.weather[0].description.slice(1);
 
+    // Extract weather condition code
+    // Will be used to change the background dinamically
+    weather.code = weatherObject.weather[0].id;
+
     // Country's name and city's name;
     weather.city = weatherObject.name;
     const regionNamesConverter = new Intl.DisplayNames(['en'], {
@@ -150,6 +196,8 @@ const applicationFlow = (function () {
       let elaboratedData = WeatherApiInteraction.extractRelevantData(apiData);
       // Display it for now
       elaboratedData.insertData();
+      // Dinamically set the background based on code
+      elaboratedData.setBackground();
     } catch (error) {
       domElements.createErrorDiv(error.message);
       return;
