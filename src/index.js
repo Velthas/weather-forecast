@@ -84,7 +84,7 @@ const domElements = (function () {
         htmlNode.style.backgroundImage = "url('" + overcastClouds + "')"
         break;
       case (this.code >= 600 && this.code <= 622): // Codes for all sorts of snow
-      "url('" + snow + "')"
+      htmlNode.style.backgroundImage = "url('" + snow + "')"
         break;
       case (this.code >= 500 && this.code <= 531): // Codes for all sorts of rain
         htmlNode.style.backgroundImage = "url('" + rain + "')"
