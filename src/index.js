@@ -94,6 +94,11 @@ const domElements = (function () {
         break;
       case (this.code >= 200 && this.code <= 232): // Codes for all sorts of thunderstorms
         htmlNode.style.backgroundImage = "url('" + thunderstorm + "')"
+        break;
+      default:
+        htmlNode.style.backgroundImage = "url('" + overcastClouds + "')" // There are some other codes for special conditions
+        // Think for example fog, or even tornadoes
+        // In doubt, better to just have a default
     }
  
   }
@@ -203,6 +208,8 @@ const applicationFlow = (function () {
       return;
     }
   }
+
+  getWeatherInfo();
 
   return { getWeatherInfo };
 })();
