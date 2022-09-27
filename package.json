@@ -17,8 +17,11 @@
   },
   "homepage": "https://github.com/Velthas/weather-forecast#readme",
   "devDependencies": {
+    "@babel/core": "^7.19.3",
+    "@babel/preset-env": "^7.19.3",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
+    "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
     "eslint": "^8.21.0",
     "style-loader": "^3.3.1",
